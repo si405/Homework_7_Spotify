@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Spotify API Player</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="style.css" />
+
+	<!--jQuery-->
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+
+	<script src="app.js"></script>
+</head>
+<body>
+
+<div class="container margin-top-20">
+	<div class="pull-right">
+		<a href="#" class="btn btn-info">Login to Spotify</a>
+		<a href="#" class="btn btn-warning">View Saved Tracks</a>
+	</div>
+
+	<div class="clearfix"></div>
+	<!--Search Form-->
+	<div class="row margin-top-20">
+		<form id="search-form">
+			<div class="col-sm-10">
+				<input type="text" id="search-field" name="search" class="form-control" placeholder="Search for Songs!" />
+			</div>
+			<div class="col-sm-2">
+				<button type="submit" id="submit-search" class="btn btn-primary btn-block">Search Songs</button>
+			</div>
+		</form>
+	</div>
+	<!--/Search Form-->
+
+	<div id="song-container"></div>
+
+	<script id="song-template" type="text/x-handlebars-template">
+		<!--One Song-->
+		<div id="song-card" class="row margin-top-20 one-song">
+			<div class="col-sm-3">
+				<img src="{{songImage}}" class="img-responsive" />
+			</div>
+			<div class="col-sm-9">
+				<h2>{{songName}}</h2>
+				<p>
+					By {{artistName}}
+				</p>
+				<p>
+					Album: {{albumName}}
+				</p>
+				<div class="margin-top-20">
+					<audio controls>
+						<source src="{{songPreview}}" type="audio/mpeg">
+					</audio>
+				</div>
+				<div class="margin-top-20">
+					<button type="submit" class="btn btn-success btn-sm">
+						<span class="glyphicon glyphicon-ok margin-right-5"></span>
+						Save Track
+					</button>
+				</div>
+			</div>
+		</div>
+		<!--/One Song-->
+	</script>
+</div>
+
+</body>
+</html>
