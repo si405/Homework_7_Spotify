@@ -41,14 +41,7 @@ $(document).ready(function() {
                       // and an array of items. Iterate through this array to
                       // display the details
                       results.tracks.items.forEach (function(track) {
-                            songDetails = {};
-                            songDetails.songName = track.name;
-                            songDetails.songPreview = track.preview_url;
-                            songDetails.artistName = track.artists[0].name;
-                            songDetails.albumName = track.album.name;
-                            songDetails.songImage = track.album.images[0].url;
-                            var newHTML = songTemplate(songDetails);
-                            $('#song-container').append(newHTML);
+                            displayTrack(track);
                       // end of results.tracks.item loop
                       });
                   },
@@ -60,23 +53,63 @@ $(document).ready(function() {
           // end of search-form on submit
           });
 
+          // When the button is clicked, access the library
+          $("#view-saved-tracks").on('click', function() {
+                $.ajax({
+                    type: "GET",
+                    url: "https://api.spotify.com/v1/me/tracks",
+                    headers: {
+                        "Authorization": "Bearer " + window.sessionStorage.getItem("spotify_access_token")
+                    },
+                    success: function(results) {
+                        // An object is returned that has an array of tracks
+                        console.log(results);
+                        results.items.forEach(function(libraryEntry) {
+                            console.log(libraryEntry.track);
+                            displayTrack(libraryEntry.track);
+                        // end of results.items for each
+                        });
+                    },
+                    error: function() {
+                        alert("There was an error");
+                    }
+
+                // end of Ajax call
+                });
+          // end of get-saved-tracks on.click
+          });
+
+          // A function to display the returned track information
+
+          function displayTrack(track) {
+            songDetails = {};
+            songDetails.songName = track.name;
+            songDetails.songPreview = track.preview_url;
+            songDetails.artistName = track.artists[0].name;
+            songDetails.albumName = track.album.name;
+            songDetails.songImage = track.album.images[0].url;
+            var newHTML = songTemplate(songDetails);
+            $('#song-container').append(newHTML);
+          // end of function displayTrack
+          };
+
           // Login to Spotify
 
-
           // $("#spotify-login").on('click', function () {
+          //     alert("Login clicked");
           //     // Request authorization from Spotify
-          //     var client_id = '460670788eaf43a8b9d871386bbb719e';
-          //     var redirect_uri = 'http://localhost:3000/';
-          //     var scope = 'user-library-read user-library-modify';
-          //     var url = 'https://accounts.spotify.com/authorize';
-          //     url += '?response_type=token';
-          //     url += '&client_id=' + encodeURIComponent(client_id);
-          //     url += '&scope=' + encodeURIComponent(scope);
-          //     url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
-          //     window.location = url;
+          //     // var client_id = '460670788eaf43a8b9d871386bbb719e';
+          //     // var redirect_uri = 'http://localhost:3000/';
+          //     // var scope = 'user-library-read user-library-modify';
+          //     // var url = 'https://accounts.spotify.com/authorize';
+          //     // url += '?response_type=token';
+          //     // url += '&client_id=' + encodeURIComponent(client_id);
+          //     // url += '&scope=' + encodeURIComponent(scope);
+          //     // url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+          //     // window.location = url;
           //       $.ajax({
           //           type: "GET",
-          //           url: "https://accounts.spotify.com/authorize?client_id=460670788eaf43a8b9d871386bbb719e&response_type=token&redirect_uri=http://localhost:3000&scope=user_library_read user_library_modify",
+          //           url: "https://accounts.spotify.com/authorize?client_id=460670788eaf43a8b9d871386bbb719e&response_type=token&redirect_uri=http://localhost:3000&scope=user-library-read user-library-modify",
           //           success: function(results) {
           //               console.log(results);
           //                   alert("Stored token!");
