@@ -50,13 +50,16 @@
 				<p>
 					Album: {{albumName}}
 				</p>
+				<!-- Use a hidden field to get the key (id) of the wine -->
+				<p id="trackId" hidden>{{trackID}}</p>
 				<div class="margin-top-20">
 					<audio controls>
 						<source src="{{songPreview}}" type="audio/mpeg">
 					</audio>
 				</div>
 				<div class="margin-top-20">
-					<button type="submit" class="btn btn-success btn-sm">
+					<!-- Add the value to the button to know which specific track is being added -->
+					<button type="submit" id="add-this-track" value="{{trackID}}" class="btn btn-success btn-sm">
 						<span class="glyphicon glyphicon-ok margin-right-5"></span>
 						Save Track
 					</button>

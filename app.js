@@ -40,7 +40,6 @@ $(document).ready(function() {
                       console.log(results);
                       $('#song-container').html("");
                       results.items.forEach(function(libraryEntry) {
-                          console.log(libraryEntry.track);
                           displayTrack(libraryEntry.track);
                       // end of results.items for each
                       });
@@ -69,6 +68,7 @@ $(document).ready(function() {
                       // display the details
                       $('#song-container').html("")
                       results.tracks.items.forEach (function(track) {
+                            console.log(track);
                             displayTrack(track);
                       // end of results.tracks.item loop
                       });
@@ -86,6 +86,7 @@ $(document).ready(function() {
           function displayTrack(track) {
             songDetails = {};
             songDetails.songName = track.name;
+            songDetails.trackID = track.id;
             songDetails.songPreview = track.preview_url;
             songDetails.artistName = track.artists[0].name;
             songDetails.albumName = track.album.name;
@@ -94,6 +95,36 @@ $(document).ready(function() {
             $('#song-container').append(newHTML);
           // end of function displayTrack
           };
+
+          // Store a track to the user's library
+          $(document).on("click", "#add-this-track", function(event) {
+              event.preventDefault();
+              if (accessToken === '') {
+                  window.sessionStorage.getItem("spotify_access_token", accessToken);
+              };
+              // Get the track to be added from the url
+              var addTrackID = $(this).attr("value");
+
+              $.ajax({
+                  type: "PUT",
+                  url: "https://api.spotify.com/v1/me/tracks?ids=" + addTrackID,
+                  headers: {
+                      "Authorization": "Bearer " + window.sessionStorage.getItem("spotify_access_token")
+                  },
+                  success: function(results) {
+                      // An object is returned that has an array of tracks
+                          alert("The track has been added to your library");
+                  },
+                  error: function(request, status, error) {
+                      console.log("Status " + status);
+                      console.log("Error " + error);
+                      alert("Unable to add the track to your library");
+                  }
+
+              // end of Ajax call
+              });
+          // end of #add-this-track on click
+          });
 
           // Login to Spotify
 
